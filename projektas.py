@@ -99,12 +99,15 @@ def take_screenshot():
 
     d = datetime.datetime.now()
     date = d.strftime('%Y-%m-%d_%H-%M-%S')
+    day = d.strftime('%Y-%m-%d')
+
+    history_log = f"hisotry_log_{day}.txt"
 
     if clean_text != "":
         print(clean_text)
 
         #isvedimas i txt laikina log tik sios sesijos
-        with open(f"ouptut_{date}.txt", "a") as f:
+        with open(f"ouptut_{date}.txt", "a", encoding='utf-8') as f:
             f.write(f"{date}\n")
             f.write("")
             f.write(f"{clean_text}\n")
@@ -113,7 +116,7 @@ def take_screenshot():
             f.write("")
 
         #isvedimas i txt history log 
-        with open("history.txt", "a") as fh:
+        with open(history_log, "a", encoding='utf-8') as fh:
             fh.write(f"{date}\n")
             fh.write("")
             fh.write(f"{clean_text}\n")
@@ -135,7 +138,17 @@ def take_screenshot():
     if clean_text != "":
         os.remove(f"ouptut_{date}.txt")
 
+   
+    
+def log_clean_up():
+    today = datetime.datetime.now().strftime('%Y-%m-%d')
 
+    for file in os.listdir():
+        if file.endswith(".txt"):
+            if today not in file:
+                os.remove(file)
+
+log_clean_up()
 
 
 keyboard.add_hotkey("ctrl+shift+a", take_screenshot)
