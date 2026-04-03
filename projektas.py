@@ -6,11 +6,42 @@ import pyperclip
 import ctypes
 import datetime
 import os
+import json
 import cutie #tam menu pasirinkimui
+import shutil
+
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2) #kadangi windows scale 150%
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+starttime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+session_log = f"session_log_{starttime}.txt"
+
+
+if os.path.exists("settings.json"):
+    with open("settings.json", "r") as f:
+        settings = json.load(f)
+
+else:
+    print("-- First time settings --")
+
+    languages = ["eng", "lit"]
+    print("Choose a language:")
+    chosen_language = languages[cutie.select(languages)]
+
+    if cutie.prompt_yes_or_no("Do you want to save the screenshots of this session?"):
+        sc_choice = True
+    else:
+        sc_choice = False
+
+    settings = {
+        "language": chosen_language,
+        "sc_choice": sc_choice
+    }
+
+    with open("settings.json", "w") as f:
+        json.dump(settings, f)
 
 
 def take_screenshot():
@@ -66,13 +97,10 @@ def take_screenshot():
             region = None
             root.destroy()
 
-        canvas.bind('<Escape>', close)
-
+        canvas.bind('<BackSpace>', close)
 
         root.mainloop()
         return(region)
-
-
 
     region = region_select()
     if region == None:
@@ -83,10 +111,20 @@ def take_screenshot():
     height = region[3] - region[1]
 
     if width < 5 or height < 5:
-        print("Per mažas dydis")
+        print("Too small area")
         return
 
     image = ImageGrab.grab(bbox =(region))
+
+    d = datetime.datetime.now()
+    date = d.strftime('%Y-%m-%d_%H-%M-%S')
+    day = d.strftime('%Y-%m-%d')
+    
+    if (settings["sc_choice"] == True):
+        if not os.path.exists("Screenshots"):
+            os.mkdir("Screenshots")
+        image.save(f"Screenshots/screenshot{date}.png")
+
     image.save("screenshot.png")
     print("Screenshot saved!")
 
@@ -94,12 +132,8 @@ def take_screenshot():
 
     # pats teksto nuskaitymas
     gray_image = img.convert("L")
-    text = pytesseract.image_to_string(gray_image)
+    text = pytesseract.image_to_string(gray_image, lang=settings["language"])
     clean_text = text.replace("\x0c", "").strip()
-
-    d = datetime.datetime.now()
-    date = d.strftime('%Y-%m-%d_%H-%M-%S')
-    day = d.strftime('%Y-%m-%d')
 
     history_log = f"hisotry_log_{day}.txt"
 
@@ -107,7 +141,7 @@ def take_screenshot():
         print(clean_text)
 
         #isvedimas i txt laikina log tik sios sesijos
-        with open(f"ouptut_{date}.txt", "a", encoding='utf-8') as f:
+        with open(session_log, "a", encoding='utf-8') as f:
             f.write(f"{date}\n")
             f.write("")
             f.write(f"{clean_text}\n")
@@ -124,22 +158,13 @@ def take_screenshot():
             fh.write("----------------------\n")
             fh.write("")
 
-
         #clipboard
         pyperclip.copy(clean_text)
         pyperclip.paste()
 
-    #pause 
-  #  os.system("pause")
-
-    #failu trinimas - pasirinkimas ar nori issaugot screenshotus
+    #screenshot trinimas 
     os.remove('screenshot.png')
-
-    if clean_text != "":
-        os.remove(f"ouptut_{date}.txt")
-
    
-    
 def log_clean_up():
     today = datetime.datetime.now().strftime('%Y-%m-%d')
 
@@ -150,8 +175,14 @@ def log_clean_up():
 
 log_clean_up()
 
-
 keyboard.add_hotkey("ctrl+shift+a", take_screenshot)
-print("Running... Press Ctrl+Shift+A to screenshot, Esc to quit")
+print("Press Ctrl+Shift+A to screenshot, Esc to quit")
 keyboard.wait('esc')
 
+#session log istrynimas
+if os.path.exists(session_log):
+    os.remove(session_log)
+    
+#sesijos screenshotu directorijos trynimas
+if os.path.exists("Screenshots"):
+    shutil.rmtree("Screenshots")
