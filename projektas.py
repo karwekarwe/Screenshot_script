@@ -9,6 +9,7 @@ import os
 import json
 import cutie #tam menu pasirinkimui
 import shutil
+from plyer import notification #notifications
 
 
 ctypes.windll.shcore.SetProcessDpiAwareness(2) #kadangi windows scale 150%
@@ -127,6 +128,13 @@ def take_screenshot():
 
     image.save("screenshot.png")
     print("Screenshot saved!")
+
+    #windows notification
+    notification.notify(
+        title="Screenshot script",
+        message="Screenshot taken!",
+        timeout=5
+    )
 
     img = Image.open('screenshot.png')
 
