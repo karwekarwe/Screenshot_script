@@ -129,19 +129,22 @@ def take_screenshot():
     image.save("screenshot.png")
     print("Screenshot saved!")
 
-    #windows notification
-    notification.notify(
-        title="Screenshot script",
-        message="Screenshot taken!",
-        timeout=5
-    )
-
     img = Image.open('screenshot.png')
 
     # pats teksto nuskaitymas
     gray_image = img.convert("L")
     text = pytesseract.image_to_string(gray_image, lang=settings["language"])
     clean_text = text.replace("\x0c", "").strip()
+
+    #word count
+    word_count = len(clean_text.split())
+
+    #windows notificationA
+    notification.notify(
+        title="Screenshot script",
+        message=f"Screenshot taken! Word count: {word_count}",
+        timeout=5
+    )
 
     history_log = f"hisotry_log_{day}.txt"
 
@@ -154,6 +157,8 @@ def take_screenshot():
             f.write("")
             f.write(f"{clean_text}\n")
             f.write("")
+            f.write(f"Word count: {word_count}\n")
+            f.write("")
             f.write("----------------------\n")
             f.write("")
 
@@ -163,12 +168,17 @@ def take_screenshot():
             fh.write("")
             fh.write(f"{clean_text}\n")
             fh.write("")
+            fh.write(f"Word count: {word_count}\n")
+            fh.write("")
             fh.write("----------------------\n")
             fh.write("")
 
         #clipboard
         pyperclip.copy(clean_text)
         pyperclip.paste()
+
+    else:
+        print("There is no text in the screenshot :(")
 
     #screenshot trinimas 
     os.remove('screenshot.png')
