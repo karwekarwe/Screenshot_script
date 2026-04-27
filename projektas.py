@@ -20,13 +20,6 @@ pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tessera
 starttime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 session_log = f"session_log_{starttime}.txt"
 
-'''
-Scriptas, skirtas išgauti tekstą iš ekrano nuotraukos
-
-tekstas
-lalala
-
-'''
 
 def settings_setup():
 
@@ -69,6 +62,7 @@ else:
 if len(sys.argv) > 2 and sys.argv[1] == "search":
     keyword = sys.argv[2]
     found = False
+    
     for file in os.listdir():
         if file.startswith("history_log"):
             line_counter = 0
