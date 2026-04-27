@@ -4,9 +4,9 @@ Pažymėjus ekrano sritį, nuskaito tekstą (OCR) ir nukopijuoja į clipboard.
 
 ## Naudojimas
  
-python script.py                     # Paleidimas
-python script.py settings            # Pakeisti nustatymus
-python script.py search <žodis>      # Ieškoti istorijoje
+python projektas.py                     # Paleidimas
+python projektas.py settings            # Pakeisti nustatymus
+python projektas.py search <žodis>      # Ieškoti istorijoje
 
 Ctrl+Shift+A – padaryti ekrano nuotrauką 
 Esc – exit
