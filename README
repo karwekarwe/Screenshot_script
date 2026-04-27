@@ -1,12 +1,23 @@
-# Screenshot OCR Tool
+# Screenshot OCR 
  
-Pažymėjus ekrano sritį, nuskaito tekstą (OCR) ir nukopijuoja į clipboard.
+Pažymėjus ekrano sritį, nuskaito tekstą (OCR), jį išsaugo ir nukopijuoja į iškarpinę.
 
 ## Naudojimas
  
 python projektas.py                     # Paleidimas
 python projektas.py settings            # Pakeisti nustatymus
-python projektas.py search <žodis>      # Ieškoti istorijoje
+python projektas.py search <žodis>      # Ieškoti history_log faile
 
 Ctrl+Shift+A – padaryti ekrano nuotrauką 
 Esc – exit
+
+## Apie
+
+session_log - tik šiuo metu esančios sesios log failas, jis ištrinamas pabaigus vykdymą
+history_log - šios dienos log failas, jis ištrinamas paleidus kodą naują dieną ir pradedamas naujas, tos dienos, log failas
+
+nustatymai saugomi settings.json faile - galima pasirinkti kalbą (en, lt), ir ar saugoti sesijos ekrano nuotraukas (jei taip - jos ištrinamos baigus vykdyti scriptą)
+
+overlay išjungimas nepadarius ekrano nuotraukos neveikia, nesugalvoju kaip sutvarkyti
+
+tekstas iš ekrano nuotraukos išsaugojamas ir iškarpinėje

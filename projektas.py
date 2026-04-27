@@ -69,6 +69,8 @@ if len(sys.argv) > 2 and sys.argv[1] == "search":
                     line_counter += 1
                     if keyword in line:
                         print(f"Found in: {file} line: {line_counter}")
+                    else:
+                        print("not found")
     
     sys.exit()
 
