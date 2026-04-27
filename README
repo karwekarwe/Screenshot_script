@@ -1,0 +1,13 @@
+# Screenshot OCR Tool
+ 
+Pažymi ekrano sritį, nuskaito tekstą (OCR) ir nukopijuoja į clipboard.
+
+## Naudojimas
+ 
+```bash
+python script.py                     # Paleidimas
+python script.py settings            # Pakeisti nustatymus
+python script.py search <žodis>      # Ieškoti istorijoje
+```
+
+**Ctrl+Shift+A** – padaryti ekrano nuotrauką | **Esc** – exit

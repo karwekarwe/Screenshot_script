@@ -42,6 +42,8 @@ def settings_setup():
 
     with open("settings.json", "w") as f:
         json.dump(settings, f)
+    
+    return settings
 
 
 if len(sys.argv) > 1 and sys.argv[1] == "settings":
@@ -54,6 +56,21 @@ elif os.path.exists("settings.json"):
 else:
     print("First time settings:")
     settings = settings_setup()
+
+
+#teksto paieska history log
+if len(sys.argv) > 2 and sys.argv[1] == "search":
+    keyword = sys.argv[2]
+    for file in os.listdir():
+        if file.startswith("history_log"):
+            line_counter = 0
+            with open(file, encoding='utf-8') as f:
+                for line in f:
+                    line_counter += 1
+                    if keyword in line:
+                        print(f"Found in: {file} line: {line_counter}")
+    
+    sys.exit()
 
 
 def take_screenshot():
@@ -157,7 +174,7 @@ def take_screenshot():
         timeout=5
     )
 
-    history_log = f"hisotry_log_{day}.txt"
+    history_log = f"history_log{day}.txt"
 
     if clean_text != "":
         print(clean_text)
