@@ -9,6 +9,7 @@ import os
 import json
 import cutie #tam menu pasirinkimui
 import shutil
+import sys
 from plyer import notification #notifications
 
 
@@ -20,14 +21,12 @@ starttime = datetime.datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 session_log = f"session_log_{starttime}.txt"
 
 
-if os.path.exists("settings.json"):
-    with open("settings.json", "r") as f:
-        settings = json.load(f)
+def settings_setup():
 
-else:
-    print("-- First time settings --")
+    print("---Settings---")
 
     languages = ["eng", "lit"]
+
     print("Choose a language:")
     chosen_language = languages[cutie.select(languages)]
 
@@ -43,6 +42,18 @@ else:
 
     with open("settings.json", "w") as f:
         json.dump(settings, f)
+
+
+if len(sys.argv) > 1 and sys.argv[1] == "settings":
+    settings = settings_setup()
+
+elif os.path.exists("settings.json"):
+    with open("settings.json", "r") as f:
+        settings = json.load(f)
+
+else:
+    print("First time settings:")
+    settings = settings_setup()
 
 
 def take_screenshot():
@@ -98,7 +109,7 @@ def take_screenshot():
             region = None
             root.destroy()
 
-        canvas.bind('<BackSpace>', close)
+        canvas.bind('<Escape>', close)
 
         root.mainloop()
         return(region)
